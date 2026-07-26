@@ -77,6 +77,7 @@ Continuous Loop → picamera2 → TFLite MobileNetV2 SSD → Labels → Piper TT
 | OS         | Raspberry Pi OS Lite 64-bit (Bookworm)| Free |
 
 **Total: ~₹3,360 
+**Camera Note:** The Pi Camera Module v1.3 works well with Gemini (which handles variable image quality gracefully), but produces inconsistent results with TFLite due to its fixed-focus lens, low dynamic range, and poor indoor performance. For more reliable offline object detection, we recommend upgrading to the **Pi Camera Module v3** (autofocus, better low-light) or the **Pi Camera Module v2** (improved sensor over v1.3). The Gemini online path is unaffected by camera quality differences.
 
 ---
 
@@ -202,6 +203,7 @@ sudo systemctl start IRIS
 - **TFLite load time** — Loading the interpreter per inference takes 8-10s. Loading once at startup keeps inference at 2-4s.
 - **Speech queue** — All TTS output goes through a single thread queue to prevent overlapping audio from concurrent TFLite and Gemini threads.
 - **Gemini active flag** — TFLite detection pauses while Gemini is processing to prevent camera resource conflicts.
+- **Pi Camera v1.3 TFLite limitation** — The v1.3's fixed focus, low dynamic range, and poor indoor image quality cause inconsistent TFLite detections. Gemini handles this well due to its robust vision model, but TFLite is more sensitive to image quality. Upgrading to Pi Camera v2 or v3 significantly improves offline detection accuracy.
 
 ---
 
